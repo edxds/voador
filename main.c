@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define CODE_LENGTH     6
-#define TABLE_SIZE      300
+#include "structs.h"
 
 #define UI_IDLE                     0
 #define UI_REGISTER_PASSENGER       1
@@ -14,22 +13,6 @@
 #define UI_CHECK_PASSENGER_FLIGHTS  6
 #define UI_CHECK_FLIGHT_PASSENGERS  7
 #define UI_EXIT                     -1
-
-typedef struct passenger {
-    char code[CODE_LENGTH];
-    char name[25];
-} passenger;
-
-typedef struct flight {
-    char code[CODE_LENGTH];
-    char origin[3];
-    char destination[3];
-} flight;
-
-typedef struct relation {
-    char code_passenger[CODE_LENGTH];
-    char code_flight[CODE_LENGTH];
-} relation;
 
 passenger passengers[TABLE_SIZE];
 flight flights[TABLE_SIZE];
