@@ -23,6 +23,7 @@ void readPassengersTable();
 
 /**
  * Appends passenger struct to end of passengers.ctable file.
+ * Increments passenger array index if save was successful.
  *
  * @param passenger Pointer to the passenger struct that will be saved.
  */
@@ -31,7 +32,6 @@ void savePassengerToTable(passenger *passenger);
 /**
  * Function that takes user input, registers a new passenger,
  * and saves it to the passengers table.
- * Increments passenger array index.
  */
 void registerPassenger();
 
