@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "structs.h"
+#include "passengers.h"
 
 #define UI_IDLE                     0
 #define UI_REGISTER_PASSENGER       1
@@ -14,11 +15,9 @@
 #define UI_CHECK_FLIGHT_PASSENGERS  7
 #define UI_EXIT                     -1
 
-passenger passengers[TABLE_SIZE];
 flight flights[TABLE_SIZE];
 relation relations[TABLE_SIZE];
 
-int currentPassengerIndex = 0;
 int currentFlightIndex = 0;
 int currentRelationIndex = 0;
 
@@ -36,106 +35,6 @@ void flushAndWait() {
 
     printf("Done! Press any key to continue.\n");
     getchar();
-}
-
-/**
- * Opens passengers table and reads the data from the file to the
- * passengers array. Also sets the passenger index according to the
- * number of passengers saved in the file.
- */
-void readPassengersTable() {
-    FILE *table = fopen("passengers.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not open passengers.ctable");
-        return;
-    }
-
-    fseek(table, 0, SEEK_SET);
-    fread(&passengers, sizeof(struct passenger), TABLE_SIZE, table);
-
-    fseek(table, 0, SEEK_END);
-    currentPassengerIndex = (int) (ftell(table) / sizeof(struct passenger));
-}
-
-/**
- * Appends passenger struct to end of passengers.ctable file.
- *
- * @param passenger Pointer to the passenger struct that will be saved.
- */
-void savePassengerToTable(passenger *passenger) {
-    FILE *table = fopen("passengers.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not save passenger.\n");
-    } else {
-        fwrite(passenger, sizeof(struct passenger), 1, table);
-    }
-}
-
-/**
- * Function that takes user input, registers a new passenger,
- * and saves it to the passengers table.
- * Increments passenger array index.
- */
-void registerPassenger() {
-    printf("   -- Register passenger\n");
-
-    printf("Name: ");
-    scanf("%s", passengers[currentPassengerIndex].name);
-
-    printf("Code: ");
-    scanf("%s", passengers[currentPassengerIndex].code);
-
-    savePassengerToTable(&passengers[currentPassengerIndex]);
-    currentPassengerIndex++;
-
-    flushAndWait();
-}
-
-/**
- * Finds a passenger with the matching code.
- *
- * @param code The code of the passenger that you want to find.
-
- * @return A pointer to the found passenger. NULL if the
- * passenger isn't found
- */
-passenger* findPassengerForCode(char code[]) {
-    int currentPosition = 0;
-    passenger *currentPassenger = &passengers[currentPosition];
-
-    // While the current passenger's code
-    // isn't equal to the code requested
-    while (strcmp(currentPassenger->code, code) != 0) {
-        currentPosition++;
-        if (currentPosition > currentPassengerIndex) {
-            // Exit the loop if we're out of bounds
-            return NULL;
-        }
-
-        currentPassenger = &passengers[currentPosition];
-    }
-
-    return currentPassenger;
-}
-
-/**
- * Asks user for a passenger code and searches a passenger with
- * the corresponding code and shows its information.
- */
-void searchPassenger() {
-    char code[CODE_LENGTH];
-
-    printf("Enter passenger code: ");
-    scanf("%s", code);
-
-    passenger *foundPassenger = findPassengerForCode(code);
-    if (foundPassenger == NULL) {
-        printf("Passenger not found.\n");
-        return;
-    }
-
-    printf("   -- Passenger %s\n", foundPassenger->code);
-    printf("Name: %s\n", foundPassenger->name);
 }
 
 /**
@@ -419,10 +318,12 @@ void handleMenuOption(int option) {
         case UI_REGISTER_PASSENGER:
             printf("\n");
             registerPassenger();
+            flushAndWait();
             break;
         case UI_REGISTER_FLIGHT:
             printf("\n");
             registerFlight();
+            flushAndWait();
             break;
         case UI_SEARCH_PASSENGER:
             printf("\n");
