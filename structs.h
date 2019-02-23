@@ -5,8 +5,7 @@
 #ifndef VOADOR_STRUCTS_H
 #define VOADOR_STRUCTS_H
 
-#define CODE_LENGTH     6
-#define TABLE_SIZE      300
+#define CODE_LENGTH 6
 
 typedef struct passenger {
     char code[CODE_LENGTH];
