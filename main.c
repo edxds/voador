@@ -4,6 +4,7 @@
 
 #include "structs.h"
 #include "passengers.h"
+#include "flights.h"
 
 #define UI_IDLE                     0
 #define UI_REGISTER_PASSENGER       1
@@ -15,10 +16,8 @@
 #define UI_CHECK_FLIGHT_PASSENGERS  7
 #define UI_EXIT                     -1
 
-flight flights[TABLE_SIZE];
 relation relations[TABLE_SIZE];
 
-int currentFlightIndex = 0;
 int currentRelationIndex = 0;
 
 /**
@@ -35,110 +34,6 @@ void flushAndWait() {
 
     printf("Done! Press any key to continue.\n");
     getchar();
-}
-
-/**
- * Opens flights table and reads the data from the file to the
- * flights array. Also sets the flight index according to the
- * number of flights saved in the file.
- */
-void readFlightsTable() {
-    FILE *table = fopen("flights.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not open flights.ctable");
-        return;
-    }
-
-    fseek(table, 0, SEEK_SET);
-    fread(&flights, sizeof(struct flight), TABLE_SIZE, table);
-
-    fseek(table, 0, SEEK_END);
-    currentFlightIndex = (int) (ftell(table) / sizeof(struct flight));
-}
-
-/**
- * Appends flight struct to end of flights.ctable file.
- *
- * @param flight Pointer to the flight struct that will be saved.
- */
-void saveFlightToTable(flight *flight) {
-    FILE *table = fopen("flights.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not save flight.\n");
-    } else {
-        fwrite(flight, sizeof(struct flight), 1, table);
-    }
-}
-
-/**
- * Function that takes user input, registers a new flight,
- * and saves it to the flights table.
- * Increments flight array index.
- */
-void registerFlight() {
-    printf("   -- Register flight\n");
-
-    printf("Code: ");
-    scanf("%s", flights[currentFlightIndex].code);
-
-    printf("Origin: ");
-    scanf("%s", flights[currentFlightIndex].origin);
-
-    printf("Destination: ");
-    scanf("%s", flights[currentFlightIndex].destination);
-
-    saveFlightToTable(&flights[currentFlightIndex]);
-    currentFlightIndex++;
-
-    flushAndWait();
-}
-
-/**
- * Finds a flight with the matching code.
- *
- * @param code The code of the flight that you want to find.
-
- * @return A pointer to the found flight. NULL if the
- * flight isn't found
- */
-flight* findFlightForCode(char code[]) {
-    int currentPosition = 0;
-    flight *currentFlight = &flights[currentPosition];
-
-    // While the current flight's code isn't equal
-    // to the code requested
-    while (strcmp(currentFlight->code, code) != 0) {
-        currentPosition++;
-        if (currentPosition > currentFlightIndex) {
-            // Exit the loop if we're out of bounds
-            return NULL;
-        }
-
-        currentFlight = &flights[currentPosition];
-    }
-
-    return currentFlight;
-}
-
-/**
- * Asks user for a flight code and searches a flight with
- * the corresponding code and shows its information.
- */
-void searchFlight() {
-    char code[CODE_LENGTH];
-
-    printf("Enter flight code: ");
-    scanf("%s", code);
-
-    flight *foundFlight = findFlightForCode(code);
-    if (foundFlight == NULL) {
-        printf("Flight not found.\n");
-        return;
-    }
-
-    printf("   -- Flight %s\n", foundFlight->code);
-    printf("Origin: %s\n", foundFlight->origin);
-    printf("Destination: %s\n", foundFlight->destination);
 }
 
 /**
