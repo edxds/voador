@@ -3,4 +3,4 @@ project(Voador C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Voador main.c structs.h passengers.c passengers.h flights.c flights.h relations.c relations.h ui.c ui.h tables.c tables.h)
+add_executable(Voador src/main.c src/structs.h src/passengers.c src/passengers.h src/flights.c src/flights.h src/relations.c src/relations.h src/ui.c src/ui.h src/tables.c src/tables.h)
