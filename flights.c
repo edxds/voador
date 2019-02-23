@@ -8,28 +8,11 @@ flight flights[TABLE_SIZE];
 int currentFlightIndex = 0;
 
 void readFlightsTable() {
-    FILE *table = fopen("flights.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not open flights.ctable");
-        return;
-    }
-
-    fseek(table, 0, SEEK_SET);
-    fread(&flights, sizeof(struct flight), TABLE_SIZE, table);
-
-    fseek(table, 0, SEEK_END);
-    currentFlightIndex = (int) (ftell(table) / sizeof(struct flight));
+    readTable("flights", sizeof(struct flight), &flights, &currentFlightIndex);
 }
 
 void saveFlightToTable(flight *flight) {
-    FILE *table = fopen("flights.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not save flight.\n");
-        return;
-    }
-
-    fwrite(flight, sizeof(struct flight), 1, table);
-    currentFlightIndex++;
+    saveToTable("flights", sizeof(struct flight), flight, &currentFlightIndex);
 }
 
 void registerFlight() {

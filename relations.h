@@ -7,6 +7,8 @@
 #include <string.h>
 
 #include "structs.h"
+#include "tables.h"
+
 #include "flights.h"
 #include "passengers.h"
 
@@ -20,12 +22,14 @@ extern int currentRelationIndex;
  * Opens relations table and reads the data from the file to the
  * relations array. Also sets the relation index according to the
  * number of relations saved in the file.
+ * Calls readTable() from tables.h internally.
  */
 void readRelationsTable();
 
 /**
  * Appends relation struct to end of relations.ctable file.
  * Increments current relation index if saving is successful.
+ * Calls saveToTable() from tables.h internally.
  *
  * @param relation A pointer to the relation struct to be saved
  */

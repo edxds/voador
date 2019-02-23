@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "structs.h"
+#include "tables.h"
 
 #ifndef VOADOR_PASSENGERS_H
 #define VOADOR_PASSENGERS_H
@@ -18,12 +19,14 @@ extern int currentPassengerIndex;
  * Opens passengers table and reads the data from the file to the
  * passengers array. Also sets the passenger index according to the
  * number of passengers saved in the file.
+ * Calls readTable() from tables.h internally.
  */
 void readPassengersTable();
 
 /**
  * Appends passenger struct to end of passengers.ctable file.
  * Increments passenger array index if save was successful.
+ * Calls saveToTable() from tables.h internally.
  *
  * @param passenger Pointer to the passenger struct that will be saved.
  */

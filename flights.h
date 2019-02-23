@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "structs.h"
+#include "tables.h"
 
 #ifndef VOADOR_FLIGHTS_H
 #define VOADOR_FLIGHTS_H
@@ -18,12 +19,14 @@ extern int currentFlightIndex;
  * Opens flights table and reads the data from the file to the
  * flights array. Also sets the flight index according to the
  * number of flights saved in the file.
+ * Calls readTable() from tables.h internally.
  */
 void readFlightsTable();
 
 /**
  * Appends flight struct to end of flights.ctable file.
  * Increments flight array index if save was successful.
+ * Calls saveToTable() from tables.h internally.
  *
  * @param flight Pointer to the flight struct that will be saved.
  */

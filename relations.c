@@ -8,28 +8,11 @@ relation relations[TABLE_SIZE];
 int currentRelationIndex = 0;
 
 void readRelationsTable() {
-    FILE *table = fopen("relations.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not open relations.ctable");
-        return;
-    }
-
-    fseek(table, 0, SEEK_SET);
-    fread(&relations, sizeof(struct relation), TABLE_SIZE, table);
-
-    fseek(table, 0, SEEK_END);
-    currentRelationIndex = (int) (ftell(table) / sizeof(struct relation));
+    readTable("relations", sizeof(struct relation), &relations, &currentRelationIndex);
 }
 
 void saveRelationToTable(relation *relation) {
-    FILE *table = fopen("relations.ctable", "a+");
-    if (table == NULL) {
-        printf("ERROR: Could not save assignment.\n");
-        return;
-    }
-
-    fwrite(relation, sizeof(struct relation), 1, table);
-    currentRelationIndex++;
+    saveToTable("relations", sizeof(struct relation), relation, &currentRelationIndex);
 }
 
 int alreadyHasRelation(char passengerCode[], char flightCode[]) {
