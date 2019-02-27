@@ -47,6 +47,9 @@ void readTable(char tableName[], size_t dataSize, void *dataDestination, int *da
      */
     fseek(table, 0, SEEK_END);
     (*dataIndex) = (int) (ftell(table) / dataSize);
+
+    // Prevents memory leaks and commits changes to file
+    fclose(table);
 }
 
 void saveToTable(char tableName[], size_t dataSize, void *data, int *dataIndex) {
@@ -58,4 +61,7 @@ void saveToTable(char tableName[], size_t dataSize, void *data, int *dataIndex) 
 
     fwrite(data, dataSize, 1, table);
     (*dataIndex)++;
+
+    // Prevents memory leaks and commits changes to file
+    fclose(table);
 }
